@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Em Manutenção - LojaVirtucal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: #f8f8f8;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            background-image: url(./Imag/fundo-home\ \(2\).jpg);
+        }
+        
+        /* Pontos amarelos em movimento */
+        .moving-dots {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .dot {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #FF8C00;
+            border-radius: 50%;
+            opacity: 0.6;
+            filter: blur(1px);
+            animation: moveDot 15s linear infinite;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 800px;
+            padding: 40px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            z-index: 10;
+            position: relative;
+            border: 3px solid #FF8C00;
+        }
+
+        h1 {
+            color: #222;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background-color: #FF8C00;
+            bottom: -10px;
+            left: 0;
+            border-radius: 2px;
+        }
+
+        p {
+            color: #444;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .countdown {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #FF8C00;
+            margin: 30px 0;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background-color: #FF8C00;
+            border-radius: 4px;
+            animation: progress 10s infinite;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shine 2s infinite;
+        }
+
+        .social-links {
+            margin-top: 40px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: #FF8C00;
+            color: white;
+            border-radius: 50%;
+            margin: 0 10px;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+            background-color: #FF6A00;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .icons-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .floating-icon {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 140, 0, 0.2);
+            animation-name: float;
+            animation-duration: 15s;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        .car-animation {
+            position: absolute;
+            bottom: 50px;
+            left: -150px;
+            animation: drive 15s linear infinite;
+            z-index: 5;
+        }
+
+        .car {
+            font-size: 3rem;
+            color: #FF8C00;
+            transform: scaleX(-1);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+        }
+
+        .bicycle-animation {
+            position: absolute;
+            bottom: 100px;
+            right: -100px;
+            animation: cycle 20s linear infinite;
+            z-index: 5;
+        }
+
+        .bicycle {
+            font-size: 2.5rem;
+            color: #333;
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+        }
+
+        .wheel {
+            animation: spin 2s linear infinite;
+            transform-origin: center;
+            display: inline-block;
+        }
+
+        @keyframes progress {
+            0% { width: 10%; }
+            50% { width: 70%; }
+            70% { width: 60%; }
+            100% { width: 90%; }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-1000px) rotate(720deg); opacity: 0; }
+        }
+
+        @keyframes drive {
+            0% { left: -150px; }
+            100% { left: calc(100% + 150px); }
+        }
+
+        @keyframes cycle {
+            0% { right: -100px; }
+            100% { right: calc(100% + 100px); }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes moveDot {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translate(var(--moveX), var(--moveY));
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+                margin: 0 15px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .countdown {
+                font-size: 1.5rem;
+            }
+
+            .social-links a {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                margin: 0 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="moving-dots">
+        <!-- Pontos amarelos em movimento serão gerados via JavaScript -->
+    </div>
+
+    <div class="icons-container">
+        <!-- Ícones flutuantes gerados via JavaScript -->
+    </div>
+
+    <div class="car-animation">
+        <div class="car">
+            <i class="bi bi-car-front-fill"></i>
+        </div>
+    </div>
+
+    <div class="bicycle-animation">
+        <div class="bicycle">
+            <i class="bi bi-bicycle"></i>
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>Site em Manutenção</h1>
+        <p>Estamos aprimorando a <strong>LojaVirtucal</strong> para oferecer uma experiência ainda melhor para você! Nossa equipe está trabalhando para que voltemos com novidades em breve.</p>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        
+        <div class="countdown">
+            Retornamos em: <span id="timer">00:00:00</span>
+        </div>
+        
+        <p>Enquanto isso, você pode nos acompanhar em nossas redes sociais para novidades:</p>
+        
+        <div class="social-links">
+            <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+            <a href="#" aria-label="WhatsApp"><i class="bi bi-whatsapp"></i></a>
+            <a href="#" aria-label="Email"><i class="bi bi-envelope-fill"></i></a>
+        </div>
+    </div>
+
+    <script>
+        // Adicionar pontos amarelos em movimento
+        const dotsContainer = document.querySelector('.moving-dots');
+        
+        for (let i = 0; i < 50; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            
+            // Posição inicial aleatória
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 100;
+            dot.style.left = `${startX}%`;
+            dot.style.top = `${startY}%`;
+            
+            // Tamanho aleatório para os pontos
+            const size = 4 + Math.random() * 8;
+            dot.style.width = `${size}px`;
+            dot.style.height = `${size}px`;
+            
+            // Movimento aleatório (destino)
+            const moveX = (Math.random() - 0.5) * 1000;
+            const moveY = (Math.random() - 0.5) * 1000;
+            dot.style.setProperty('--moveX', `${moveX}px`);
+            dot.style.setProperty('--moveY', `${moveY}px`);
+            
+            // Velocidade e atraso aleatórios
+            dot.style.animationDelay = `${Math.random() * 10}s`;
+            dot.style.animationDuration = `${10 + Math.random() * 20}s`;
+            
+            // Opacidade aleatória
+            dot.style.opacity = 0.3 + Math.random() * 0.5;
+            
+            dotsContainer.appendChild(dot);
+        }
+        
+        // Adicionar ícones flutuantes
+        const iconsContainer = document.querySelector('.icons-container');
+        const icons = ['bi-gear-fill', 'bi-tools', 'bi-wrench', 'bi-gear-wide-connected', 
+                      'bi-car-front', 'bi-bicycle', 'bi-cart-fill', 'bi-house-fill'];
+        
+        for (let i = 0; i < 20; i++) {
+            const icon = document.createElement('div');
+            icon.className = 'floating-icon';
+            icon.innerHTML = `<i class="bi ${icons[Math.floor(Math.random() * icons.length)]}"></i>`;
+            
+            // Posição aleatória
+            icon.style.left = `${Math.random() * 100}%`;
+            icon.style.top = `${Math.random() * 100}%`;
+            
+            // Tamanho aleatório
+            const size = 1 + Math.random() * 2;
+            icon.style.fontSize = `${size}rem`;
+            
+            // Animação com delay aleatório
+            icon.style.animationDelay = `${Math.random() * 10}s`;
+            icon.style.animationDuration = `${15 + Math.random() * 20}s`;
+            
+            iconsContainer.appendChild(icon);
+        }
+
+        // Countdown timer
+        function updateTimer() {
+            // Definir um tempo aleatório entre 2 e 6 horas
+            const hours = 2 + Math.floor(Math.random() * 4);
+            const minutes = Math.floor(Math.random() * 60);
+            const seconds = Math.floor(Math.random() * 60);
+            
+            let totalSeconds = hours * 3600 + minutes * 60 + seconds;
+            
+            const timerElement = document.getElementById('timer');
+            
+            const interval = setInterval(() => {
+                if (totalSeconds <= 0) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                totalSeconds--;
+                
+                const h = Math.floor(totalSeconds / 3600);
+                const m = Math.floor((totalSeconds % 3600) / 60);
+                const s = totalSeconds % 60;
+                
+                timerElement.textContent = 
+                    `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            }, 1000);
+        }
+        
+        // Iniciar o timer quando a página carregar
+        document.addEventListener('DOMContentLoaded', updateTimer);
+    </script>
+</body>
+</html>
